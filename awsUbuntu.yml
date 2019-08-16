@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: A sample template
+Resources:
+  MyEC2InstanceUBUNTU:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-07d0cf3af28718ef8"
+      InstanceType: t2.micro
+      KeyName: Linux29aug
+      SubnetId: subnet-0f8170fdd0487312e
+      BlockDeviceMappings:
+        - DeviceName: /dev/sdm
+          Ebs:
+            VolumeType: io1
+            Iops: 200
+            DeleteOnTermination: true
+            VolumeSize: 20
+      Tags:
+        - Key: "Name"
+          Value: "awsec2"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          sudo apt install python -y
+  MyEIPUBUNTU:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref MyEC2InstanceUBUNTU
